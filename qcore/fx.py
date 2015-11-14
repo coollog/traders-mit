@@ -298,8 +298,8 @@ class FXBot(BaseBot):
             self.lastActionTime = time()
 
             # XXX: Your strategies go here
-            # orders = self.marketMake(orders)
-            # orders = self.momentum(orders)
+            orders = self.marketMake(orders)
+            orders = self.momentum(orders)
             orders = self.arbitrage(orders)
             # orders.extend(self.sellCHFJPY())
 

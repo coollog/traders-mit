@@ -44,7 +44,7 @@ class BaseBot(object):
     # uri = 'localhost:10914'
     # trader_id = 'trader0'
     # password = 'trader0'
-    uri = 'm.angocore.com'
+    uri = 'a.angocore.com'
     trader_id = 'qingyang.chen@yale.edu'
     password = 'even-usual-hundreds'
 

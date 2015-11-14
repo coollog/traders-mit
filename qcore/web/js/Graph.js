@@ -9,7 +9,7 @@ var Graph = {
   chart: null,
   start: 0,
   count: 0,
-  maxVals: 20,
+  maxVals: 20000,
   series: {},
   lastDraw: 0,
   options: {

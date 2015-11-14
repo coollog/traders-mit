@@ -1,0 +1,199 @@
+<script src="https://cdn.socket.io/socket.io-1.3.7.js"></script>
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/1.0.2/Chart.min.js"></script>
+
+<style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    transition: 0.1s all ease-in-out;
+    border: 0;
+  }
+  body {
+    height: 100%;
+    font-family: Tahoma, Geneva, sans-serif;
+    line-height: 1.5em;
+  }
+  .panel {
+    padding: 1em;
+    position: absolute;
+    display: block;
+  }
+  log {
+    width: 50%;
+    bottom: 0;
+    height: 25%;
+    background: #fff5ee;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 0.8em;
+    overflow-y: auto;
+  }
+  log.paused {
+    background: #FFC9C7;
+  }
+  controls {
+    width: 50%;
+    height: 25%;
+    right: 0;
+    bottom: 0;
+    background: #f8f8f8;
+  }
+  log p.red {
+    color: red;
+  }
+  log p.green {
+    color: green;
+  }
+  log p.blue {
+    color: blue;
+  }
+  button {
+    padding: 1em;
+    background: #EEE8FF;
+    text-transform: uppercase;
+    cursor: pointer;
+  }
+  button.red {
+    background: #FFC9C7;
+  }
+  button.red:hover {
+    border-color: #870500;
+  }
+  button:hover {
+    border: 1px solid #001F7F;
+  }
+  button:active {
+    opacity: 0.5;
+  }
+  input {
+    font: inherit;
+    padding: 0.5em 1em;
+    background: #444;
+    color: white;
+  }
+  status {
+    width: 100%;
+    height: 3em;
+    background: #750;
+    color: #fff;
+    padding: 0 !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  status.started {
+    background: #575;
+  }
+  status > * {
+    display: inline-block;
+
+    border: 1px solid #999;
+    height: 100%;
+    padding: 0.5em 1em;
+  }
+  #chart {
+    width: 50% !important;
+    height: 50% !important;
+    top: 3em;
+  }
+  chartoptions {
+    width: 50%;
+    height: calc(25% - 3em);
+    top: calc(50% + 3em);
+    background: #ffe;
+    overflow-y: auto;
+  }
+  tickers {
+    display: block;
+    margin-top: 1em;
+  }
+  tickers ticker {
+    display: inline-block;
+    border: 4px solid transparent;
+    padding: 0.5em;
+    cursor: pointer;
+  }
+  .fade {
+    opacity: 0.5;
+  }
+  buyandsell {
+    left: 50%;
+    top: 3em;
+    width: 50%;
+    height: calc(75% - 3em);
+    background: #fafaff;
+  }
+  buyandsell buttongroup {
+    margin-bottom: 0.5em;
+  }
+  buyandsell button {
+    background: white;
+    border: 2px solid transparent;
+  }
+  buyandsell buttongroup {
+    display: block;
+  }
+  position {
+    margin-left: 1em;
+  }
+  position:before {
+    content: 'Position: ';
+  }
+  buy {
+    color: green;
+  }
+  sell {
+    color: red;
+  }
+</style>
+
+<script src="js/Graph.js"></script>
+<script src="js/Log.js"></script>
+<script src="js/ProcessMessage.js"></script>
+<script>
+  var connected = false;
+  var socket;
+
+  $(function setupSocketIO() {
+    socket = io.connect('http://' + document.domain + ':' + location.port);
+
+    socket.on('connected', function (msg) {
+      Log.log('Connected!', 'green');
+      connected = true;
+      socket.emit('pull');
+    });
+
+    socket.on('push', function (msgs) {
+      processMessages(msgs);
+      socket.emit('pull');
+    });
+  });
+
+  $(function setupControls() {
+    $('#sendmessage').click(function () {
+      if (!connected) return;
+      socket.emit('msg', 'kejwrwearn');
+      console.log('emitted')
+    });
+  });
+</script>
+
+<log class="panel"></log>
+<controls class="panel">
+  <button id="togglelogging" class="red">Pause Logging</button>
+  <button id="sendmessage" class="red">Send message</button>
+</controls>
+<status class="panel">
+  <started>Not Started</started>
+  <traderstatus>NO STATUS</traderstatus>
+</status>
+<canvas id="chart" class="panel"></canvas>
+<chartoptions class="panel">
+  <button id="pausechart" class="red">Pause Chart</button>
+  Num X: <input id="maxVals">
+  <tickers></tickers>
+</chartoptions>
+<buyandsell class="panel">
+  Quantity: <input id="quantity" value="1000">
+  <br /><br />
+  <buttons></buttons>
+</buyandsell>

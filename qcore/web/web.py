@@ -8,7 +8,6 @@ from pprint import pprint
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'secret!'
-app.config['SERVER_NAME'] = '127.0.0.1'
 socketio = SocketIO(app)
 
 updateQueue = Queue()

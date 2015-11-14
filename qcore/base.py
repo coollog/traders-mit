@@ -41,12 +41,12 @@ class Options():
 
 class BaseBot(object):
     # XXX change me for actual running
-    uri = 'localhost:10914'
-    trader_id = 'trader0'
-    password = 'trader0'
-    # uri = 'big.m.angocore.com'
-    # trader_id = 'qingyang.chen@yale.edu'
-    # password = 'even-usual-hundreds'
+    # uri = 'localhost:10914'
+    # trader_id = 'trader0'
+    # password = 'trader0'
+    uri = 'big.m.angocore.com'
+    trader_id = 'qingyang.chen@yale.edu'
+    password = 'even-usual-hundreds'
 
     # Sets up the connection to the server.
     # Please do not change anything here unless
